@@ -36,7 +36,7 @@ char** _str_split(char* str, const char delim, int *n) {
     {
         /* Either of those will cause problems */
         *n = -1;
-        return result; // return NULL
+        return NULL;
     }
     char* tmp        = str;
     char* last_comma = 0;
@@ -69,11 +69,6 @@ char** _str_split(char* str, const char delim, int *n) {
         assert(idx == count);
         *(result + idx) = 0;
     }
-    // for (int i = 0; i < count; i++)
-    // {
-    //     printf("%d-%s;", i, result[i]);
-    // }
-    // putchar('\n');
     return result;
 }
 
@@ -104,6 +99,10 @@ tac *_tac_from_line(char *ln){
 
     ln = _str_trim(ln);
     tokens = _str_split(ln, ' ', &count);
+
+    if (tokens == NULL){
+        return tac_init_none();
+    }
 
     if(count == 2){
         code = tac_init_none();
@@ -220,10 +219,6 @@ tac *tac_from_buffer(char *buf){
         }
         else{
             lnbuf[i] = '\0';
-            // empty line
-            if (strlen(lnbuf) == 0){
-                continue;
-            }
             inst = _tac_from_line(lnbuf);
             tac_append(self, inst);
             i = 0;
