@@ -30,7 +30,7 @@ char *_str_trim(char *str) {
 
 char** _str_split(char* str, const char delim, int *n) {
     // from: https://stackoverflow.com/questions/9210528/
-    if (*str == '\0' || str == NULL || delim == '\0' )
+    if (*str == '\0' || str == NULL || delim == '\0')
     {
         // Either of those will cause problems
         *n = -1;
