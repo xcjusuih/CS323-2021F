@@ -30,14 +30,15 @@ char *_str_trim(char *str) {
 
 char** _str_split(char* str, const char delim, int *n) {
     // from: https://stackoverflow.com/questions/9210528/
-    char** result    = 0;
-    size_t count     = 0;
-    if ((strlen(str) == 0) || ( str == NULL ) || ( delim == '\0' ))
+    if (*str == '\0' || str == NULL || delim == '\0' )
     {
-        /* Either of those will cause problems */
+        // Either of those will cause problems
         *n = -1;
         return NULL;
     }
+
+    char** result    = 0;
+    size_t count     = 0;
     char* tmp        = str;
     char* last_comma = 0;
     char delims[2];
