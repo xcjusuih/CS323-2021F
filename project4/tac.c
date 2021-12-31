@@ -32,6 +32,12 @@ char** _str_split(char* str, const char delim, int *n) {
     // from: https://stackoverflow.com/questions/9210528/
     char** result    = 0;
     size_t count     = 0;
+    if ((strlen(str) == 0) || ( str == NULL ) || ( delim == '\0' ))
+    {
+        /* Either of those will cause problems */
+        *n = -1;
+        return result; // return NULL
+    }
     char* tmp        = str;
     char* last_comma = 0;
     char delims[2];
@@ -63,6 +69,11 @@ char** _str_split(char* str, const char delim, int *n) {
         assert(idx == count);
         *(result + idx) = 0;
     }
+    // for (int i = 0; i < count; i++)
+    // {
+    //     printf("%d-%s;", i, result[i]);
+    // }
+    // putchar('\n');
     return result;
 }
 
@@ -209,6 +220,10 @@ tac *tac_from_buffer(char *buf){
         }
         else{
             lnbuf[i] = '\0';
+            // empty line
+            if (strlen(lnbuf) == 0){
+                continue;
+            }
             inst = _tac_from_line(lnbuf);
             tac_append(self, inst);
             i = 0;
