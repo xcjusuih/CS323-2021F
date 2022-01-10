@@ -23,7 +23,6 @@ write:
 main:
   addi $sp, $sp, -48
   sw $ra, ($sp)
-  lw $t1, 44($sp)
   jal read
   move $t1, $v0
   move $t2, $t1

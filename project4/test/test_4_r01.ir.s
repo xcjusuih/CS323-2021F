@@ -23,47 +23,47 @@ write:
 hanoi:
   addi $sp, $sp, -128
   sw $ra, ($sp)
-  lw $t2, 124($sp)
-  move $t1, $t2
-  li $t3, 1
-  beq $t1, $t3, label0
+  lw $t1, 124($sp)
+  lw $t2, 120($sp)
+  lw $t3, 116($sp)
+  lw $t4, 112($sp)
+  move $t5, $t1
+  li $t6, 1
+  beq $t5, $t6, label0
   j label1
 label0:
-  lw $t5, 120($sp)
-  move $t4, $t5
-  li $t6, 10000
-  mul $t7, $t4, $t6
-  lw $s1, 112($sp)
-  move $s0, $s1
-  add $s2, $t7, $s0
-  move $a0, $s2
+  move $t7, $t2
+  li $s0, 10000
+  mul $s1, $t7, $s0
+  move $s2, $t4
+  add $s3, $s1, $s2
+  move $a0, $s3
   jal write
   j label2
 label1:
-  move $s3, $t2
-  li $s4, 1
-  sub $s5, $s3, $s4
-  move $s6, $t5
-  move $s7, $s1
-  lw $t0, 116($sp)
-  move $t8, $t0
-  sw $t8, -4($sp)
+  move $s4, $t1
+  li $s5, 1
+  sub $s6, $s4, $s5
+  move $s7, $t2
+  move $t8, $t4
+  move $t0, $t3
+  sw $t0, -16($sp)
+  sw $t8, -12($sp)
   sw $s7, -8($sp)
-  sw $s6, -12($sp)
-  sw $s5, -16($sp)
-  sw $t1, 108($sp)
-  sw $t3, 104($sp)
-  sw $t4, 100($sp)
-  sw $t6, 96($sp)
-  sw $t7, 92($sp)
-  sw $s0, 88($sp)
-  sw $s2, 84($sp)
-  sw $s3, 80($sp)
-  sw $s4, 76($sp)
-  sw $s5, 72($sp)
-  sw $s6, 68($sp)
-  sw $s7, 64($sp)
-  sw $t8, 60($sp)
+  sw $s6, -4($sp)
+  sw $t0, 60($sp)
+  sw $t5, 108($sp)
+  sw $t6, 104($sp)
+  sw $t7, 100($sp)
+  sw $s0, 96($sp)
+  sw $s1, 92($sp)
+  sw $s2, 88($sp)
+  sw $s3, 84($sp)
+  sw $s4, 80($sp)
+  sw $s5, 76($sp)
+  sw $s6, 72($sp)
+  sw $s7, 68($sp)
+  sw $t8, 64($sp)
   jal hanoi
   move $t1, $v0
   lw $t3, 120($sp)
@@ -83,10 +83,10 @@ label1:
   move $s5, $s6
   move $s7, $t3
   move $t8, $t7
-  sw $t8, -4($sp)
-  sw $s7, -8($sp)
-  sw $s5, -12($sp)
-  sw $s4, -16($sp)
+  sw $t8, -16($sp)
+  sw $s7, -12($sp)
+  sw $s5, -8($sp)
+  sw $s4, -4($sp)
   sw $t1, 56($sp)
   sw $t2, 52($sp)
   sw $t4, 48($sp)
@@ -117,10 +117,10 @@ main:
   li $t5, 1
   li $t6, 2
   li $t7, 3
-  sw $t7, -4($sp)
-  sw $t6, -8($sp)
-  sw $t5, -12($sp)
-  sw $t4, -16($sp)
+  sw $t7, -16($sp)
+  sw $t6, -12($sp)
+  sw $t5, -8($sp)
+  sw $t4, -4($sp)
   sw $t0, 8($sp)
   sw $t1, 4($sp)
   sw $t2, 32($sp)
