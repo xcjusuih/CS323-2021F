@@ -88,7 +88,7 @@ struct VarDesc *select_insert_var(struct VarDesc *vars, tac_opd *name,
     *offset -= 4;
     var->next->offset = *offset;
     (*var_num)++;
-    // printf("VVVariable name: %s\n", var->next->var);
+    // printf("# Variable name: %s\n", var->next->var);
     return var->next;
 }
 
@@ -442,6 +442,7 @@ tac *emit_arg(tac *arg) {
         Register reg = get_register(_tac_quadruple(arg).var);
         _mips_iprintf("sw %s, %d($sp)", _reg_name(reg), offset);
         arg = arg->next;
+        offset-=4;
     }
     /* COMPLETE emit function */
     return arg;

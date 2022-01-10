@@ -9,4 +9,4 @@ clean:
 	@rm -rf $(BIN)
 .PHONY: clean
 testing: 
-	make splc && bin/splc sample/test_4_fact.ir>sample.s
+	make splc && bin/splc test/test_4_r01.ir>sample.s
