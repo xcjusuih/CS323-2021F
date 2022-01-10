@@ -9,4 +9,5 @@ clean:
 	@rm -rf $(BIN)
 .PHONY: clean
 testing: 
-	make splc && bin/splc test/test_4_r01.ir>sample.s
+	make splc
+	@for i in test/*.ir; do bin/splc $$i > $$i.s; done

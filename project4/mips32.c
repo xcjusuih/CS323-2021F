@@ -19,8 +19,8 @@ struct VarDesc *select_var(char *name) {
 Register get_register(tac_opd *opd) {
     // assert(opd->kind == OP_VARIABLE);
     if (opd->kind == OP_CONSTANT) {
-        _mips_iprintf("li $at, %d", opd->int_val);
-        return at;
+        _mips_iprintf("li $v1, %d", opd->int_val);
+        return v1;
     }
     assert(opd->kind == OP_VARIABLE);
     struct VarDesc *var = select_var(opd->char_val);
@@ -62,8 +62,8 @@ void clear_registers() {
                 _mips_iprintf("sw %s, %d($sp)", regs[r].name, var->offset);
                 regs[r].dirty = FALSE;
             }
-
             regs[r].var[0] = 0;
+            var->reg=zero;
         }
     }
 }
@@ -96,10 +96,10 @@ Register get_register_w(tac_opd *opd) {
     assert(opd->kind == OP_VARIABLE);
 
     struct VarDesc *var = select_var(opd->char_val);
-    // printf("var %s\n",opd->char_val);
-    assert(var != NULL);
+    // printf("var %s\n", opd->char_val);
     // printf("var: %s, variable reg: %s, reg variable: %s\n", var->var,
     //        _reg_name(var->reg), regs[var->reg].var);
+    assert(var != NULL);
     if (var->reg != zero && strcmp(var->var, regs[var->reg].var) == 0) {
         regs[var->reg].dirty = TRUE;
         return var->reg;
@@ -187,6 +187,7 @@ int push_stack(tac *function) {
         } else if (_tac_kind(tacode) == READ) {
             select_insert_var(vars, tacode->code.param.p, &offset, &num_vars);
         } else if (_tac_kind(tacode) == CALL) {
+            select_insert_var(vars, tacode->code.call.ret, &offset, &num_vars);
             exist_call = TRUE;
         }
     }
@@ -197,15 +198,16 @@ int push_stack(tac *function) {
         }
     }
     _mips_iprintf("addi $sp, $sp, %d", offset - 4);
-    _mips_iprintf("sw $ra, $sp");
+    _mips_iprintf("sw $ra, ($sp)");
     return num_vars;
 }
 void pull_stack(int var_num) {
+    _mips_iprintf("lw $ra ($sp)");
     _mips_iprintf("addi $sp, $sp, %d", var_num * 4 + 4);
 }
 
 tac *emit_function(tac *function) {
-    _mips_printf("%s:", _tac_quadruple(function).funcname);
+    _mips_printf("\n%s:", _tac_quadruple(function).funcname);
     int var_num = push_stack(function->next);
     tac *(*tac_emitter)(tac *);
     function = function->next;
@@ -425,7 +427,6 @@ tac *emit_return(tac *return_) {
         Register reg = get_register(_tac_quadruple(return_).var);
         _mips_iprintf("move $v0, %s", _reg_name(reg));
     }
-    _mips_iprintf("lw $ra ($sp)");
     _mips_iprintf("jr $ra");
     /* COMPLETE emit function */
     return return_->next;
@@ -442,7 +443,7 @@ tac *emit_arg(tac *arg) {
         Register reg = get_register(_tac_quadruple(arg).var);
         _mips_iprintf("sw %s, %d($sp)", _reg_name(reg), offset);
         arg = arg->next;
-        offset-=4;
+        offset -= 4;
     }
     /* COMPLETE emit function */
     return arg;
@@ -451,6 +452,9 @@ tac *emit_arg(tac *arg) {
 tac *emit_call(tac *call) {
     clear_registers();
     _mips_iprintf("jal %s", _tac_quadruple(call).funcname);
+
+    _mips_iprintf("move %s, $v0",
+                  _reg_name(get_register_w(_tac_quadruple(call).ret)));
     /* COMPLETE emit function */
     return call->next;
 }
