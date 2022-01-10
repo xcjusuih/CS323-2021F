@@ -33,7 +33,7 @@ int main(int argc, char *argv[]){
     fp = stdout; // fopen(file, "w");
     head = tac_from_buffer(buf);
     mips32_gen(head, fp);
-    // fclose(fp);
+    fclose(fp);
 
     return 0;
 }
